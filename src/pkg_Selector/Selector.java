@@ -24,17 +24,17 @@ public class Selector {
 
     public Selector() {
         this.url = "https://www.wacai.com/user/user.action?url=http%3A%2F%2Fbbs.wacai.com%2Fportal.php";
-        Scanner input = new Scanner(System.in);
-        System.out.println("Please input the account");
-        this.account = input.next();
-        System.out.println("Please input the password");
-        this.pwd = input.next();
+        //Scanner input = new Scanner(System.in);
+        //System.out.println("Please input the account");
+        this.account = "******";//input.next();
+        //System.out.println("Please input the password");
+        this.pwd = "******";//input.next();
         this.dr = new FirefoxDriver();
         this.dr.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
     }
 
 
-    public void login( ) throws Exception {
+    public WebDriver login( ) throws Exception {
         //登录
         dr.get(url);
         dr.findElement(By.id("account")).clear();
@@ -42,9 +42,10 @@ public class Selector {
         dr.findElement(By.id("pwd")).clear();
         dr.findElement(By.id("pwd")).sendKeys(pwd);
         dr.findElement(By.id("login-btn")).click();
+        return dr;
     }
 
-    public void switchWindow() throws Exception {
+    public WebDriver switchWindow() throws Exception {
         //打开理财规划子版块
         String a = dr.findElement(By.linkText("理财规划")).getAttribute("href");
         //直接用WebDriver.get()方式打开页面，浏览器不会新开页面，省得切换窗口
@@ -52,9 +53,10 @@ public class Selector {
         dr.manage().window().maximize();
         //然后关闭左侧导航栏
         dr.findElement(By.cssSelector("a.comiis_left_closes")).click();
+        return dr;
     }
 
-    public void mouseMove() throws Exception {
+    public WebDriver mouseMove() throws Exception {
 
         //点开搜索类型下拉框，将鼠标移动到用户上并选择
         Actions act = new Actions(dr);
@@ -63,9 +65,10 @@ public class Selector {
         act.click(dropDown).perform();
         act.moveToElement(user).click().perform();
         act.moveByOffset(20, 30).click().perform();
+        return dr;
     }
 
-    public void search() throws Exception {
+    public WebDriver search() throws Exception {
         //找到搜索输入框，并输入关键字，然后点击搜索按钮
         WebElement input = dr.findElement(By.id("comiis_twtsc_txt"));
         input.clear();
@@ -83,6 +86,7 @@ public class Selector {
             if (dr.getTitle().equals("查找好友 - 挖财社区"))
                 break;
         }
+        return dr;
     }
 
     public WebDriver select() throws InterruptedException {
@@ -102,7 +106,7 @@ public class Selector {
         return dr;
     }
 
-    public void tearDown(WebDriver dr) throws Exception {
+    public void tearDown() throws Exception {
         dr.quit();
     }
     public static void main(String[] args) throws Exception {
@@ -129,6 +133,8 @@ public class Selector {
             userLevel = sArray[0];
             userName = searchResult.get(i).findElement(By.cssSelector("h4>a")).getText();
             System.out.printf("%-20s %-20s %-20s\n",userName,userLevel,userMark);
+
+            s.tearDown();
         }
     }
 }
