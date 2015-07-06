@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Sophie on 15/7/6.
@@ -29,6 +30,7 @@ public class Selector {
         System.out.println("Please input the password");
         this.pwd = input.next();
         this.dr = new FirefoxDriver();
+        this.dr.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
     }
 
 
